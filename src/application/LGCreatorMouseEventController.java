@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -79,11 +80,18 @@ public class LGCreatorMouseEventController implements EventHandler<MouseEvent>{
     //-------------------------------------------------------------------------
     if(event.getSource() instanceof ImageView){
       iv = (ImageView)(event.getSource());
+      Label lbl = view.rolesNbrLblArray[Integer.valueOf(iv.getId())];
       if (event.getButton() == MouseButton.SECONDARY) {
-        view.rolesSFac[Integer.valueOf(iv.getId())].decrement(1);
+        if(!lbl.getText().equals("" + LGCreator.MINIMUM_PAR_ROLE)) {
+          lbl.setText(String.valueOf(Integer.valueOf(lbl.getText())-1));
+          model.setPlayerNbr(model.getPlayerNbr()-1);
+        }
       }
       if (event.getButton() == MouseButton.PRIMARY) {
-        view.rolesSFac[Integer.valueOf(iv.getId())].increment(1);
+        if(!lbl.getText().equals("" + LGCreator.MAXIMUM_PAR_ROLE)) {
+          lbl.setText(String.valueOf(Integer.valueOf(lbl.getText())+1));
+          model.setPlayerNbr(model.getPlayerNbr()+1);
+        }
       }
       if (MouseEvent.MOUSE_ENTERED == event.getEventType()) {
         view.scene.setCursor(Cursor.HAND);

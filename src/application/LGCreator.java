@@ -6,6 +6,8 @@ public class LGCreator {
   //-------------------------------------------------------------------------
   //Constantes
   //-------------------------------------------------------------------------
+  static final int MINIMUM_PAR_ROLE = 0;
+  static final int MAXIMUM_PAR_ROLE = 50;
   static final int NOMBRE_DE_ROLES_JEU_DE_BASE = 8;
   static final int NOMBRE_DE_ROLES_NOUVELLE_LUNE = 5;
   static final int NOMBRE_DE_ROLES_LE_VILLAGE = 3;

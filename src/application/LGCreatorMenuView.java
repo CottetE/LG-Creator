@@ -8,7 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -37,7 +36,6 @@ public class LGCreatorMenuView extends Application{
   private VBox leftMenuVB = new VBox();
   private VBox rightMenuVB = new VBox();
   
-  private VBox mainVB = new VBox();
   private HBox playerNbrHB = new HBox();
   private Label playerNbrLbl = new Label("Nombre de joueurs : ");
   private Label playerNbr = new Label("");
@@ -68,7 +66,6 @@ public class LGCreatorMenuView extends Application{
   Button nouvellePartieBT = new Button("Lancer une \nnouvelle partie");
   Button reprendrePartieBT = new Button("Reprendre la \npartie en cours");
   
-  private Label listeRolesLbl = new Label("Liste des rôles : ");
   private ScrollPane rolesSP = new ScrollPane();
   GridPane rolesGrid = new GridPane();
   VBox[] rolesVBArray = new VBox[LGCreator.NOMBRE_DE_ROLES_TOTAL];
@@ -157,8 +154,8 @@ public class LGCreatorMenuView extends Application{
                                    new Image(getClass().getResourceAsStream("/application/resources/cartes_inventees/sirene.png")),
                                    new Image(getClass().getResourceAsStream("/application/resources/cartes_inventees/wendigo.png"))};
   private ImageView[] rolesIVArray = new ImageView[LGCreator.NOMBRE_DE_ROLES_TOTAL];
-  private Spinner<Integer> rolesS;
-  IntegerSpinnerValueFactory[] rolesSFac = new IntegerSpinnerValueFactory[LGCreator.NOMBRE_DE_ROLES_TOTAL];
+
+  Label[] rolesNbrLblArray = new Label[LGCreator.NOMBRE_DE_ROLES_TOTAL];
   
   private Image[] fonds = {new Image(getClass().getResourceAsStream("/application/resources/autres/fond_arriere.png")),
                            new Image(getClass().getResourceAsStream("/application/resources/autres/fond_arriere2.png")),
@@ -180,12 +177,9 @@ public class LGCreatorMenuView extends Application{
       rolesVBArray[i] = new VBox();
       rolesIVArray[i] = new ImageView(rolesImgArray[i]);
       rolesIVArray[i].setId("" + i);
-      rolesSFac[i] = new IntegerSpinnerValueFactory(0,50,0,1);  
-      rolesS = new Spinner<Integer>(rolesSFac[i]);
-      rolesS.getEditor().setStyle(fontParametre + "-fx-background-image: url(\"/application/resources/autres/fond_arriere3.png\");"
-                + "-fx-focus-color:transparent;");
-      rolesS.setStyle("-fx-focus-color:transparent;");
-      rolesVBArray[i].getChildren().addAll(rolesLblArray[i],rolesIVArray[i],rolesS);
+      rolesNbrLblArray[i] = new Label("0");
+      rolesNbrLblArray[i].setStyle(fontParametre);
+      rolesVBArray[i].getChildren().addAll(rolesLblArray[i],rolesIVArray[i],rolesNbrLblArray[i]);
       rolesVBArray[i].setAlignment(Pos.CENTER);
       rolesVBArray[i].setStyle("-fx-border-width: 5 5 5 5; -fx-border-color: black;");
       rolesIVArray[i].setFitHeight(200);
@@ -204,6 +198,18 @@ public class LGCreatorMenuView extends Application{
     mouseEventController = new LGCreatorMouseEventController(this,model);
     gameView.start(primaryStage);
     
+    BackgroundImage fond_arriere1 = new BackgroundImage(fonds[0],
+        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+          BackgroundSize.DEFAULT);
+    
+    BackgroundImage fond_arriere2 = new BackgroundImage(fonds[2],
+        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+          BackgroundSize.DEFAULT);
+    
+    BackgroundImage fond_arriere3 = new BackgroundImage(fonds[1],
+        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+          BackgroundSize.DEFAULT);
+    
     //-------------------------------------------------------------------------
     //Conteneurs et composants du Menu
     //-------------------------------------------------------------------------
@@ -217,9 +223,6 @@ public class LGCreatorMenuView extends Application{
         CornerRadii.EMPTY,
         new BorderWidths(5),
         new Insets(0)            )));
-    BackgroundImage fond_arriere1 = new BackgroundImage(fonds[0],
-        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-          BackgroundSize.DEFAULT);
     rootMenu.setBackground(new Background(fond_arriere1));
     
     title.setFont(Font.font ("Verdana", FontWeight.BOLD, 70));
@@ -231,7 +234,7 @@ public class LGCreatorMenuView extends Application{
     menuHB.setSpacing(10);
     menuHB.setBackground(new Background(fond_arriere1));
     
-    leftMenuVB.getChildren().addAll(mainVB,variantesVB,extensionsVB,buttonVB);
+    leftMenuVB.getChildren().addAll(variantesVB,extensionsVB,buttonVB);
     leftMenuVB.setPadding(new Insets(10,0,10,0));
     leftMenuVB.setAlignment(Pos.TOP_CENTER);
     leftMenuVB.setSpacing(10);
@@ -242,29 +245,7 @@ public class LGCreatorMenuView extends Application{
         CornerRadii.EMPTY,
         new BorderWidths(5),
         new Insets(0)            )));
-    BackgroundImage fond_arriere2 = new BackgroundImage(fonds[2],
-        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-          BackgroundSize.DEFAULT);
     leftMenuVB.setBackground(new Background(fond_arriere2));
-    
-    
-    mainVB.getChildren().addAll(playerNbrHB);
-    mainVB.setPadding(new Insets(10));
-    mainVB.setAlignment(Pos.CENTER);
-    mainVB.setSpacing(10);
-    mainVB.setStyle("-fx-border-width: 5 0 5 0; -fx-border-color: black;");
-    
-    playerNbrHB.getChildren().addAll(playerNbrLbl);
-    playerNbrHB.setSpacing(10);
-    playerNbrHB.setAlignment(Pos.CENTER);
-    
-    playerNbrLbl.setMinWidth(230);
-    playerNbrLbl.setMaxWidth(230);
-    playerNbrLbl.setStyle(fontParametre);
-    
-    playerNbr.setMinWidth(50);
-    playerNbr.setMaxWidth(50);
-    playerNbr.setStyle(fontParametre2);
     
     variantesVB.getChildren().addAll(variantesLbl,varianteStdRB,varianteFWRB);
     variantesVB.setPadding(new Insets(10));
@@ -363,7 +344,6 @@ public class LGCreatorMenuView extends Application{
     nouvellePartieBT.setMinWidth(210);
     nouvellePartieBT.setMaxWidth(210);
     nouvellePartieBT.setPadding(new Insets(5));
-    nouvellePartieBT.setDisable(true);
     nouvellePartieBT.setTextAlignment(TextAlignment.CENTER);
     nouvellePartieBT.setStyle(fontParametre);
     nouvellePartieBT.setBackground(new Background(fond_arriere1));
@@ -376,7 +356,7 @@ public class LGCreatorMenuView extends Application{
     reprendrePartieBT.setStyle(fontParametre);
     reprendrePartieBT.setBackground(new Background(fond_arriere1));
     
-    rightMenuVB.getChildren().addAll(listeRolesLbl,rolesSP);
+    rightMenuVB.getChildren().addAll(playerNbrHB,rolesSP);
     rightMenuVB.setPadding(new Insets(20));
     rightMenuVB.setAlignment(Pos.CENTER);
     rightMenuVB.setSpacing(20);
@@ -386,14 +366,27 @@ public class LGCreatorMenuView extends Application{
         CornerRadii.EMPTY,
         new BorderWidths(5),
         new Insets(0)            )));
-    BackgroundImage fond_arriere3 = new BackgroundImage(fonds[1],
-        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-          BackgroundSize.DEFAULT);
     rightMenuVB.setBackground(new Background(fond_arriere3));
     
-    listeRolesLbl.setMinWidth(250);
-    listeRolesLbl.setMaxWidth(250);
-    listeRolesLbl.setStyle(fontParametre);
+    playerNbrHB.getChildren().addAll(playerNbrLbl,playerNbr);
+    playerNbrHB.setAlignment(Pos.CENTER);
+    playerNbrHB.setMinWidth(290);
+    playerNbrHB.setMaxWidth(290);
+    playerNbrHB.setPadding(new Insets(10));
+    playerNbrHB.setBackground(new Background(fond_arriere2));
+    playerNbrHB.setBorder(new Border(new BorderStroke(Color.BLACK,
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        new BorderWidths(5),
+        new Insets(0)            )));
+    
+    playerNbrLbl.setMinWidth(225);
+    playerNbrLbl.setMaxWidth(225);
+    playerNbrLbl.setStyle(fontParametre);
+    
+    playerNbr.setMinWidth(35);
+    playerNbr.setMaxWidth(35);
+    playerNbr.setStyle(fontParametre);
     
     for(Label l : rolesLblArray) {
       l.setStyle(fontParametre);
@@ -402,7 +395,12 @@ public class LGCreatorMenuView extends Application{
     rolesSP.setContent(rolesGrid);
     rolesSP.setFitToWidth(true);
     rolesSP.setBackground(new Background(fond_arriere2));
-    rolesSP.setStyle("-fx-background: url(\"/application/resources/autres/fond_arriere3.png\");");
+    rolesSP.setStyle("-fx-background: rgb(96,77,72);");
+    rolesSP.setBorder(new Border(new BorderStroke(Color.BLACK,
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        new BorderWidths(5),
+        new Insets(0)            )));
     
     rolesGrid.setAlignment(Pos.CENTER);
     
@@ -430,11 +428,13 @@ public class LGCreatorMenuView extends Application{
     //-------------------------------------------------------------------------
     //Bindings du Menu
     //-------------------------------------------------------------------------
+    playerNbr.textProperty().bind(model.playerNbrProp().asString());
     nouvelleLuneRB1.disableProperty().bind(nouvelleLuneCB.selectedProperty().not());
     nouvelleLuneRB2.disableProperty().bind(nouvelleLuneCB.selectedProperty().not());  
     leVillageRB1.disableProperty().bind(leVillageCB.selectedProperty().not());
     leVillageRB2.disableProperty().bind(leVillageCB.selectedProperty().not());
-      
+    reprendrePartieBT.disableProperty().bind(model.gameInProgressProp().not());
+    
     //-------------------------------------------------------------------------
     //Controleurs sur les mouseEvent
     //-------------------------------------------------------------------------

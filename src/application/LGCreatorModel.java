@@ -1,16 +1,20 @@
 package application;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class LGCreatorModel implements ILGCreatorModel{
   private BooleanProperty gameInProgressProp = new SimpleBooleanProperty();
+  private IntegerProperty playerNbrProp = new SimpleIntegerProperty();
   
   public LGCreatorModel() {
-    this(false);
+    this(false, LGCreator.MINIMUM_PAR_ROLE);
   }
-  public LGCreatorModel(boolean gameInProgress) {
+  public LGCreatorModel(boolean gameInProgress, int playerNbr) {
     setGameInProgress(gameInProgress);
+    setPlayerNbr(playerNbr);
   }
   
   //----------------------------------------------------------------------------
@@ -25,5 +29,19 @@ public class LGCreatorModel implements ILGCreatorModel{
   @Override
   public void setGameInProgress(boolean gameInProgress) {
     gameInProgressProp.set(gameInProgress);
+  }
+  
+//----------------------------------------------------------------------------
+  @Override
+  public IntegerProperty playerNbrProp() {
+    return playerNbrProp;
+  }
+  @Override
+  public int getPlayerNbr() {
+    return playerNbrProp.get();
+  }
+  @Override
+  public void setPlayerNbr(int playerNbr) {
+    playerNbrProp.set(playerNbr);
   }
 }
